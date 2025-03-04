@@ -2,12 +2,21 @@ import { format } from "date-fns";
 import { Avatar } from "./Avatar";
 import { Comment } from "./Comment";
 import styles from "./Post.module.css";
+import { useState } from "react";
 
-export function Post({ author, publishedAt }) {
+export function Post({ author, publishedAt, content }) {
   const publishedDateFormatted = format(
     publishedAt,
     "d 'de' LLLL 'às' HH:mm 'h'"
   );
+
+  const [comments, setComments] = useState([1, 2]);
+
+  function handleCreateNewComment() {
+    event.preventDefault();
+    setComments([...comments, comments.length]);
+    console.log(comments);
+  }
 
   return (
     <article className={styles.post}>
@@ -28,7 +37,7 @@ export function Post({ author, publishedAt }) {
 
       <div className={styles.content}></div>
 
-      <form className={styles.commentForm}>
+      <form onSubmit={handleCreateNewComment} className={styles.commentForm}>
         <strong>Deixe seu feedback</strong>
         <textarea placeholder="Deixe um comentário"></textarea>
         <footer>
@@ -37,9 +46,9 @@ export function Post({ author, publishedAt }) {
       </form>
 
       <div className={styles.commentList}>
-        <Comment></Comment>
-        <Comment></Comment>
-        <Comment></Comment>
+        {comments.map((comment) => {
+          return <Comment />;
+        })}
       </div>
     </article>
   );
