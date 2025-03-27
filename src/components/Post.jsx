@@ -10,28 +10,37 @@ export function Post({ author, publishedAt, content }) {
     "d 'de' LLLL 'às' HH:mm 'h'"
   );
 
-  const [comments, setComments] = useState(["Post muito bacana, Hein?!"]);
+  // Agora cada comentário terá um id único
+  const [comments, setComments] = useState([
+    { id: 1, text: "Post muito bacana, Hein?!" },
+  ]);
 
   const [newCommentText, setnewCommentText] = useState("");
 
-  function handleCreateNewCommentChange() {
+  function handleCreateNewCommentChange(event) {
     event.target.setCustomValidity("");
     setnewCommentText(event.target.value);
   }
 
-  function handleCreateNewComment() {
+  function handleCreateNewComment(event) {
     event.preventDefault();
-    setComments([...comments, newCommentText]);
+    const newComment = {
+      id: Date.now(), // Gera um ID único baseado no timestamp
+      text: newCommentText,
+    };
+    setComments([...comments, newComment]);
     setnewCommentText("");
   }
-  function DeleteComment(commentToDelete) {
-    const commentsWithoudDeletedOn = comments.filter((comments) => {
-      return comments !== commentToDelete;
-    });
-    setComments(commentsWithoudDeletedOn);
+
+  function DeleteComment(commentId) {
+    // Filtra os comentários mantendo todos menos o que tem o ID especificado
+    const commentsWithoutDeletedOne = comments.filter(
+      (comment) => comment.id !== commentId
+    );
+    setComments(commentsWithoutDeletedOne);
   }
 
-  function handleNewCommentInvalid() {
+  function handleNewCommentInvalid(event) {
     event.target.setCustomValidity("Esse campo é obrigatório");
   }
 
@@ -42,20 +51,16 @@ export function Post({ author, publishedAt, content }) {
       <header>
         <div className={styles.author}>
           <Avatar src={author.avatarUrl} alt="" className={styles.avatar} />
-
           <div className={styles.authorInfo}>
             <strong>{author.name}</strong>
             <span>{author.role}</span>
           </div>
         </div>
-
         <time title="" dateTime="2024-11-21 14:19:30">
           {publishedDateFormatted}
         </time>
       </header>
-
       <div className={styles.content}></div>
-
       <form onSubmit={handleCreateNewComment} className={styles.commentForm}>
         <strong>Deixe seu feedback</strong>
         <textarea
@@ -72,17 +77,14 @@ export function Post({ author, publishedAt, content }) {
           </button>
         </footer>
       </form>
-
       <div className={styles.commentList}>
-        {comments.map((comment) => {
-          return (
-            <Comment
-              key={comment}
-              content={comment}
-              onDeleteComment={DeleteComment}
-            />
-          );
-        })}
+        {comments.map((comment) => (
+          <Comment
+            key={comment.id}
+            content={comment.text}
+            onDeleteComment={() => DeleteComment(comment.id)}
+          />
+        ))}
       </div>
     </article>
   );
