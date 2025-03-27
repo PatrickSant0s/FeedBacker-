@@ -1,5 +1,7 @@
 Projeto de Rede Social - Comentários Interativos
 Descrição do Projeto
+
+
 Este é um projeto de uma aplicação de rede social, onde os usuários podem interagir por meio de posts e comentários. A aplicação permite que o usuário publique conteúdos, curta e exclua comentários, além de exibir informações sobre o autor de cada post. Foi desenvolvido utilizando React, CSS Modules e Hooks. Este projeto foi criado com o objetivo de reforçar e consolidar os conhecimentos de React, focando principalmente na manipulação de estados, uso de hooks e interatividade com componentes.
 
 Funcionalidades
